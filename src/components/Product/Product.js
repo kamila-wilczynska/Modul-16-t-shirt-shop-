@@ -6,13 +6,15 @@ import PropTypes from 'prop-types';
 
 const Product = props => {
 	const [currentColor, setcurrentColor] = useState(props.colors[0]);
-	//const [currentSize, setcurrentSize = useState(0);
+	const [currentSize, setCurrentSize] = useState(props.sizes[0]);
+	
 
 	const ColorClassName = (color) => {
 		return styles[
 		  "color" + color[0].toUpperCase() + color.substr(1).toLowerCase()
 		];
 	  };
+	  console.log(ColorClassName);
 
 	Product.propTypes ={            //type checking
 		colors: PropTypes.array,
@@ -36,10 +38,15 @@ const Product = props => {
           <div className={styles.sizes}>
             <h3 className={styles.optionLabel}>Sizes</h3>
             <ul className={styles.choices}>
-              <li><button type="button" className={styles.active}>S</button></li>
-              <li><button type="button">M</button></li>
-              <li><button type="button">L</button></li>
-              <li><button type="button">XL</button></li>
+				{props.sizes.map((size)=>(
+					<li><button 
+					type="button" 
+					className={size.name === currentSize ? styles.active : ""}>
+					{size.name}
+					</button>
+					</li>
+				))}
+              
             </ul>
           </div>
           <div className={styles.colors}>
