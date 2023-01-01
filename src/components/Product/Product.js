@@ -7,7 +7,9 @@ import PropTypes from 'prop-types';
 const Product = props => {
 	const [currentColor, setCurrentColor] = useState(props.colors[0]);
 	const [currentSize, setCurrentSize] = useState(props.sizes[0]);
-	
+	const [currentSizePrice, setCurrentSizePrice] = useState(
+		props.sizes[0].additionalPrice
+	  );
 
 	const ColorClassName = (color) => {
 		return styles[
@@ -20,6 +22,9 @@ const Product = props => {
 		colors: PropTypes.array,
 		sizes: PropTypes.array,
 	  }
+function getPrice() {
+	return props.basePrice + currentSizePrice;
+}
 
 
   return (
@@ -34,7 +39,8 @@ const Product = props => {
       <div>
         <header>
           <h2 className={styles.name}>{props.title}</h2>
-          <span className={styles.price}>Price: {props.basePrice}</span>
+          
+		  <span className={styles.price}>Price: {getPrice()}$</span>
         </header>
         <form>
           <div className={styles.sizes}>
@@ -43,8 +49,8 @@ const Product = props => {
 				{props.sizes.map((size)=>(
 					<li>
 					 <button 
-					 type="button" 
-					 onClick={() => setCurrentSize(size.name)} 
+					 type="button"  
+					 onClick={() => {setCurrentSize(size.name); setCurrentSizePrice(size.additionalPrice)}}
 					 className={size.name === currentSize ? styles.active : null}>
 					{size.name}
 					</button>
