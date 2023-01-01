@@ -18,14 +18,25 @@ const Product = props => {
 	  };
 	  console.log(ColorClassName);
 
-	Product.propTypes ={            //type checking
-		colors: PropTypes.array,
-		sizes: PropTypes.array,
-	  }
+	  Product.propTypes = {                //checking types
+		id: PropTypes.number.isRequired,
+		name: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
+		basePrice: PropTypes.number.isRequired,
+		colors: PropTypes.array.isRequired,
+		sizes: PropTypes.array.isRequired,
+	  };
+
 function getPrice() {
 	return props.basePrice + currentSizePrice;
 }
 
+const shoppingSummary = {
+    name: props.title,
+    color: currentColor,
+    size: currentSize,
+    price: getPrice(),
+  }
 
   return (
     <article className={styles.product}>
@@ -72,7 +83,8 @@ function getPrice() {
               ))}
             </ul>
           </div>
-          <Button className={styles.button}>
+          <Button  onClick={(event) => {event.preventDefault(); console.log('Summary: ', shoppingSummary)}} 
+		  className={styles.button}>
             <span className="fa fa-shopping-cart" />
           </Button>
         </form>
