@@ -5,7 +5,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const Product = props => {
-	const [currentColor, setcurrentColor] = useState(props.colors[0]);
+	const [currentColor, setCurrentColor] = useState(props.colors[0]);
 	const [currentSize, setCurrentSize] = useState(props.sizes[0]);
 	
 
@@ -20,6 +20,8 @@ const Product = props => {
 		colors: PropTypes.array,
 		sizes: PropTypes.array,
 	  }
+
+
   return (
     <article className={styles.product}>
       <div className={styles.imageContainer}>
@@ -39,9 +41,11 @@ const Product = props => {
             <h3 className={styles.optionLabel}>Sizes</h3>
             <ul className={styles.choices}>
 				{props.sizes.map((size)=>(
-					<li><button 
-					type="button" 
-					className={size.name === currentSize ? styles.active : ""}>
+					<li>
+					 <button 
+					 type="button" 
+					 onClick={() => setCurrentSize(size.name)} 
+					 className={size.name === currentSize ? styles.active : null}>
 					{size.name}
 					</button>
 					</li>
@@ -54,8 +58,10 @@ const Product = props => {
 			<ul className={styles.choices}>
               {props.colors.map((prod) => (
                 <li key={prod}>
-                  <button type="button" 
-				  className={clsx(ColorClassName(prod), prod === currentColor && styles.active)} />
+                   <button 
+				   type="button" 
+				   onClick={() => setCurrentColor(prod)} 
+				   className={clsx(ColorClassName(prod), prod === currentColor && styles.active)} />
                 </li>
               ))}
             </ul>
