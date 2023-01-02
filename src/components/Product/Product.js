@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import ProductImage from "../ProductImage/ProductImage";
 import ProductForm from "../ProductForm/ProductForm";
+import { useMemo } from "react";
 
 const Product = (props) => {
   const [currentColor, setCurrentColor] = useState(props.colors[0]);
@@ -10,22 +11,25 @@ const Product = (props) => {
   const [currentSizePrice, setCurrentSizePrice] = useState(
     props.sizes[0].additionalPrice
   );
-  function totalPrice() {
-    return props.basePrice + currentSizePrice;
+  //function totalPrice() {
+    //return props.basePrice + currentSizePrice;
+	function newtotalPrice(a, b) {
+		return a + b;
+
   }
+
+  const totalPrice = useMemo(()=> newtotalPrice(props.basePrice, currentSizePrice), [props.basePrice, currentSizePrice]);
+
+
   const shoppingSummary = {
     name: props.title,
     color: currentColor,
     size: currentSize,
-    price: totalPrice(),
+    //price: totalPrice(),
+	price: totalPrice,
   };
 
-  Product.propTypes = {
-	id: PropTypes.number.isRequired,
-	name: PropTypes.string.isRequired,
-	title: PropTypes.string.isRequired,
-	basePrice: PropTypes.number.isRequired,
-  };
+
   
   return (
     <article className={styles.product}>
@@ -33,7 +37,8 @@ const Product = (props) => {
       <div>
         <header>
           <h2 className={styles.name}>{props.title}</h2>
-          <span className={styles.price}>Price: {totalPrice()}$</span>
+          
+		  <span className={styles.price}>Price: {totalPrice}$</span>
         </header>
         <ProductForm
           colors={props.colors}
@@ -54,4 +59,10 @@ const Product = (props) => {
   );
 };
 
+Product.propTypes = {
+	id: PropTypes.number.isRequired,
+	name: PropTypes.string.isRequired,
+	title: PropTypes.string.isRequired,
+	basePrice: PropTypes.number.isRequired,
+  };
 export default Product;
