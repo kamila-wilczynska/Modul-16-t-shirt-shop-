@@ -1,96 +1,57 @@
-import styles from './Product.module.scss';
-import clsx from 'clsx';
-import Button from '../Button/Button';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import styles from "./Product.module.scss";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import ProductImage from "../ProductImage/ProductImage";
+import ProductForm from "../ProductForm/ProductForm";
 
-const Product = props => {
-	const [currentColor, setCurrentColor] = useState(props.colors[0]);
-	const [currentSize, setCurrentSize] = useState(props.sizes[0]);
-	const [currentSizePrice, setCurrentSizePrice] = useState(
-		props.sizes[0].additionalPrice
-	  );
-
-	const ColorClassName = (color) => {
-		return styles[
-		  "color" + color[0].toUpperCase() + color.substr(1).toLowerCase()
-		];
-	  };
-	  console.log(ColorClassName);
-
-	  Product.propTypes = {                //checking types
-		id: PropTypes.number.isRequired,
-		name: PropTypes.string.isRequired,
-		title: PropTypes.string.isRequired,
-		basePrice: PropTypes.number.isRequired,
-		colors: PropTypes.array.isRequired,
-		sizes: PropTypes.array.isRequired,
-	  };
-
-function getPrice() {
-	return props.basePrice + currentSizePrice;
-}
-
-const shoppingSummary = {
+const Product = (props) => {
+  const [currentColor, setCurrentColor] = useState(props.colors[0]);
+  const [currentSize, setCurrentSize] = useState(props.sizes[0].name);
+  const [currentSizePrice, setCurrentSizePrice] = useState(
+    props.sizes[0].additionalPrice
+  );
+  function totalPrice() {
+    return props.basePrice + currentSizePrice;
+  }
+  const shoppingSummary = {
     name: props.title,
     color: currentColor,
     size: currentSize,
-    price: getPrice(),
-  }
+    price: totalPrice(),
+  };
 
+  Product.propTypes = {
+	id: PropTypes.number.isRequired,
+	name: PropTypes.string.isRequired,
+	title: PropTypes.string.isRequired,
+	basePrice: PropTypes.number.isRequired,
+  };
+  
   return (
     <article className={styles.product}>
-      <div className={styles.imageContainer}>
-        <img 
-          className={styles.image}
-          alt="Kodilla shirt"
-          //src={`${process.env.PUBLIC_URL}/images/products/shirt-kodilla--black.jpg`} />
-		  src={`${process.env.PUBLIC_URL}/images/products/shirt-${props.name}--${currentColor}.jpg`} />
-      </div>
+      <ProductImage name={props.name} color={currentColor} />
       <div>
         <header>
           <h2 className={styles.name}>{props.title}</h2>
-          
-		  <span className={styles.price}>Price: {getPrice()}$</span>
+          <span className={styles.price}>Price: {totalPrice()}$</span>
         </header>
-        <form>
-          <div className={styles.sizes}>
-            <h3 className={styles.optionLabel}>Sizes</h3>
-            <ul className={styles.choices}>
-				{props.sizes.map((size)=>(
-					<li>
-					 <button 
-					 type="button"  
-					 onClick={() => {setCurrentSize(size.name); setCurrentSizePrice(size.additionalPrice)}}
-					 className={size.name === currentSize ? styles.active : null}>
-					{size.name}
-					</button>
-					</li>
-				))}
-              
-            </ul>
-          </div>
-          <div className={styles.colors}>
-            <h3 className={styles.optionLabel}>Colors</h3>
-			<ul className={styles.choices}>
-              {props.colors.map((prod) => (
-                <li key={prod}>
-                   <button 
-				   type="button" 
-				   onClick={() => setCurrentColor(prod)} 
-				   className={clsx(ColorClassName(prod), prod === currentColor && styles.active)} />
-                </li>
-              ))}
-            </ul>
-          </div>
-          <Button  onClick={(event) => {event.preventDefault(); console.log('Summary: ', shoppingSummary)}} 
-		  className={styles.button}>
-            <span className="fa fa-shopping-cart" />
-          </Button>
-        </form>
+        <ProductForm
+          colors={props.colors}
+          actionColor={setCurrentColor}
+          currentColor={currentColor}
+          size={props.size}
+          actionSize={setCurrentSize}
+          currentSize={currentSize}
+          shoppingSummary={shoppingSummary}
+          onClick={props.onClick}
+          price={currentSizePrice}
+          actionPrice={setCurrentSizePrice}
+          sizes={props.sizes}
+          type={props.type}
+        />
       </div>
     </article>
-  )
+  );
 };
 
 export default Product;
